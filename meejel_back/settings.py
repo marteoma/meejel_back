@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'meejel.apps.MeejelConfig',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
