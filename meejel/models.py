@@ -109,7 +109,6 @@ class Step(models.Model):
     def __str__(self):
         return self.description
 
-    class Meta: a
-
-    verbose_name = "Paso"
-    verbose_name_plural = "Pasos"
+    class Meta:
+        verbose_name = "Paso"
+        verbose_name_plural = "Pasos"
