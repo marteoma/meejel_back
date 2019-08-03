@@ -10,8 +10,8 @@ log = logging.getLogger("gunicorn")
 
 
 class PaginationStandard(pagination.PageNumberPagination):
-    page_size = 100
-    max_page_size = 150
+    page_size = 10
+    max_page_size = 25
     page_size_query_param = 'page_size'
     page_query_param = 'page'
 
@@ -26,5 +26,16 @@ class PaginationStandard(pagination.PageNumberPagination):
 
 
 class AssessmentViewSet(viewsets.ModelViewSet):
-    queryset = Assessment.objects.all()
     serializer_class = AssessmentSerializer
+
+    def get_queryset(self):
+        return self.request.user.assessments.all()
+
+
+class PrincipleViewSet(viewsets.ModelViewSet):
+    serializer_class = PrincipleSerializer
+
+    def get_queryset(self):
+        assessment_id = self.kwargs['assessment_pk']
+        queryset = Principle.objects.filter(assessment_id=assessment_id)
+        return queryset

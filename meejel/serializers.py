@@ -17,4 +17,15 @@ class GroupSerializers(serializers.ModelSerializer):
 class AssessmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assessment
-        fields = ('name', 'owner')
+        fields = ('name', 'owner', 'principles')
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['principles'] = PrincipleSerializer(instance.principles, many=True).data
+        return response
+
+
+class PrincipleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Principle
+        fields = ('principle', 'grade', 'justification')
