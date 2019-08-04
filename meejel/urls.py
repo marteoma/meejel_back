@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework_nested import routers
-from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 
 from meejel.views import *
 
@@ -20,4 +20,6 @@ urlpatterns = [
     path('', include(assessment_router.urls)),
     path('', include(principle_router.urls)),
     path('api-token-auth/', obtain_jwt_token),
+    path('api-token-refresh/', refresh_jwt_token),
+    path('api-token-verify/', verify_jwt_token),
 ]

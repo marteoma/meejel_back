@@ -14,6 +14,7 @@ class Assessment(models.Model):
         return self.name
 
     class Meta:
+        ordering = ['-id']
         verbose_name = "Evaluación"
         verbose_name_plural = "Evaluaciones"
         unique_together = ("name", "owner")

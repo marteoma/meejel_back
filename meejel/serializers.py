@@ -21,6 +21,8 @@ class AssessmentSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
+        owner = User.objects.get(pk=response['owner'])
+        response['owner'] = owner.get_full_name()
         response['principles'] = PrincipleSerializer(instance.principles, many=True).data
         response['components'] = ComponentSerializer(instance.components, many=True).data
         return response
@@ -29,19 +31,19 @@ class AssessmentSerializer(serializers.ModelSerializer):
 class PrincipleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Principle
-        fields = ('principle', 'grade', 'justification')
+        fields = ('id', 'principle', 'grade', 'justification')
 
 
 class ComponentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Component
-        fields = ('description', 'component_type')
+        fields = ('id', 'description', 'component_type')
 
 
 class EvidenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evidence
-        fields = ('principle', 'component')
+        fields = ('id', 'principle', 'component')
 
     def to_representation(self, instance):
         response = super().to_representation(instance)

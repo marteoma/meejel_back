@@ -27,6 +27,7 @@ class PaginationStandard(pagination.PageNumberPagination):
 
 class AssessmentViewSet(viewsets.ModelViewSet):
     serializer_class = AssessmentSerializer
+    pagination_class = PaginationStandard
 
     def get_queryset(self):
         return self.request.user.assessments.all()
