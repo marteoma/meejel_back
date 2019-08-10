@@ -14,17 +14,28 @@ class GroupSerializers(serializers.ModelSerializer):
         fields = ('name', )
 
 
-class AssessmentSerializer(serializers.ModelSerializer):
+class InstrumentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Assessment
-        fields = ('name', 'owner', 'principles')
+        model = Instrument
+        fields = ('id', 'name', 'components', 'owner')
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
-        owner = User.objects.get(pk=response['owner'])
-        response['owner'] = owner.get_full_name()
-        response['principles'] = PrincipleSerializer(instance.principles, many=True).data
         response['components'] = ComponentSerializer(instance.components, many=True).data
+        response['owner'] = instance.owner.get_full_name()
+        return response
+
+
+class AssessmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Assessment
+        fields = ('id', 'instrument', 'principles')
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['owner'] = instance.instrument.owner.get_full_name()
+        response['instrument'] = instance.instrument.name
+        response['principles'] = PrincipleSerializer(instance.principles, many=True).data
         return response
 
 

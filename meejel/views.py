@@ -25,12 +25,25 @@ class PaginationStandard(pagination.PageNumberPagination):
         })
 
 
+class InstrumentViewSet(viewsets.ModelViewSet):
+    serializer_class = InstrumentSerializer
+    pagination_class = PaginationStandard
+
+    def get_queryset(self):
+        return self.request.user.instruments.all()
+
+
 class AssessmentViewSet(viewsets.ModelViewSet):
     serializer_class = AssessmentSerializer
     pagination_class = PaginationStandard
 
     def get_queryset(self):
-        return self.request.user.assessments.all()
+        return Assessment.objects.filter(instrument__owner=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        print(kwargs, request, args)
+        response = super().create(request, args, kwargs)
+        return response
 
 
 class PrincipleViewSet(viewsets.ModelViewSet):
@@ -46,8 +59,8 @@ class ComponentViewSet(viewsets.ModelViewSet):
     serializer_class = ComponentSerializer
 
     def get_queryset(self):
-        assessment_id = self.kwargs['assessment_pk']
-        queryset = Component.objects.filter(assessment_id=assessment_id)
+        instrument_id = self.kwargs['instrument_pk']
+        queryset = Component.objects.filter(instrument_id=instrument_id)
         return queryset
 
 
@@ -55,7 +68,6 @@ class EvidenceViewSet(viewsets.ModelViewSet):
     serializer_class = EvidenceSerializer
 
     def get_queryset(self):
-        print(self.kwargs)
-        principle_id = self.kwargs['principle_pk']
-        queryset = Evidence.objects.filter(principle_id=principle_id)
+        assessment = self.kwargs['assessment_pk']
+        queryset = Evidence.objects.filter(principle__assessment=assessment)
         return queryset
