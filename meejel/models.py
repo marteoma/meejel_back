@@ -79,3 +79,4 @@ class Evidence(models.Model):
         ordering = ['-id']
         verbose_name_plural = 'Evidencias'
         verbose_name = 'Evidencia'
+        unique_together = ('principle', 'component')
