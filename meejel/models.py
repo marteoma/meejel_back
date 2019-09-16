@@ -52,7 +52,7 @@ class Principle(models.Model):
 
 
 class Component(models.Model):
-    description = models.TextField(verbose_name='Descripción')
+    description = models.TextField(verbose_name='Nombre')
     instrument = models.ForeignKey(Instrument, on_delete=models.CASCADE, related_name='components', verbose_name='Instrumento')
     component_type = models.CharField(max_length=20, choices=EVIDENCE_CHOICES, verbose_name='Tipo')
 

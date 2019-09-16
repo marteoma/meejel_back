@@ -10,7 +10,6 @@ router.register('instrument', InstrumentViewSet, basename='instrument')
 router.register('assessment', AssessmentViewSet, basename='assessment')
 
 instrument_router = routers.NestedSimpleRouter(router, 'instrument', lookup='instrument')
-instrument_router.register('component', ComponentViewSet, base_name='components')
 
 assessment_router = routers.NestedSimpleRouter(router, 'assessment', lookup='assessment')
 assessment_router.register('principle', PrincipleViewSet, base_name='principles')

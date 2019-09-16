@@ -1,3 +1,5 @@
+from distutils.command.install import install
+
 from .models import *
 from rest_framework import serializers
 
@@ -17,12 +19,23 @@ class GroupSerializers(serializers.ModelSerializer):
 class InstrumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instrument
-        fields = ('id', 'name', 'components', 'owner')
+        fields = ('id', 'name', 'owner')
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
-        response['components'] = ComponentSerializer(instance.components, many=True).data
+        # response['components'] = ComponentSerializer(instance.components, many=True).data
         response['owner'] = instance.owner.get_full_name()
+        response['Objetivos'] = GoalSerializer(Component.objects.filter(instrument=instance, component_type='Objetivos'),
+                                               many=True).data
+        response['Reglas'] = RuleSerializer(
+            Component.objects.filter(instrument=instance, component_type='Reglas'),
+            many=True).data
+        response['Roles'] = RoleSerializer(
+            Component.objects.filter(instrument=instance, component_type='Roles'),
+            many=True).data
+        response['Pasos'] = StepSerializer(
+            Component.objects.filter(instrument=instance, component_type='Pasos'),
+            many=True).data
         return response
 
 
@@ -45,10 +58,48 @@ class PrincipleSerializer(serializers.ModelSerializer):
         fields = ('id', 'principle', 'grade', 'justification')
 
 
-class ComponentSerializer(serializers.ModelSerializer):
+class GoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Component
-        fields = ('id', 'description', 'component_type')
+        fields = ('id', )
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['Oname'] = instance.description
+        return response
+
+
+class RuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Component
+        fields = ('id', )
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['Rname'] = instance.description
+        return response
+
+
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Component
+        fields = ('id', )
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['Roname'] = instance.description
+        return response
+
+
+class StepSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Component
+        fields = ('id', )
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['Sname'] = instance.description
+        return response
 
 
 class EvidenceSerializer(serializers.ModelSerializer):
@@ -61,5 +112,4 @@ class EvidenceSerializer(serializers.ModelSerializer):
         principle = Principle.objects.get(pk=response['principle'])
         component = Component.objects.get(pk=response['component'])
         response['principle'] = PrincipleSerializer(principle).data
-        response['component'] = ComponentSerializer(component).data
         return response
