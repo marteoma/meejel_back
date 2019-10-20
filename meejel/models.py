@@ -5,7 +5,8 @@ from .extras import GRADE_CHOICES, PRINCIPLE_CHOICES, EVIDENCE_CHOICES
 
 class Instrument(models.Model):
     name = models.CharField(null=False, max_length=100, verbose_name='Nombre')
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='instruments', verbose_name='Dueño')
+    owner = models.ForeignKey(User, on_delete=models.SET_DEFAULT, related_name='instruments',
+                              verbose_name='Dueño', default='Unknown')
 
     def __str__(self):
         return self.name
