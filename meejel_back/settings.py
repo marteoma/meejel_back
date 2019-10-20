@@ -83,12 +83,12 @@ WSGI_APPLICATION = 'meejel_back.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        # 'NAME': 'postgres',
-        'NAME': 'meejel',
+        'NAME': 'postgres',
+        # 'NAME': 'meejel',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        # 'HOST': 'db',
-        'HOST': 'localhost',
+        'HOST': 'db',
+        # 'HOST': '127.0.0.1',
         'PORT': '5432'
     }
 }
