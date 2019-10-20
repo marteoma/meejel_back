@@ -63,26 +63,18 @@ class InstrumentViewSet(viewsets.ModelViewSet):
             return Response({'error': 'an instrument with that name already exists'}, status=status.HTTP_409_CONFLICT)
 
 
-class AssessmentViewSet(viewsets.ModelViewSet):
-    serializer_class = AssessmentSerializer
-    # pagination_class = PaginationStandard
-
-    def get_queryset(self):
-        return Assessment.objects.filter(instrument__owner=self.request.user)
-
-
 class PrincipleViewSet(viewsets.ModelViewSet):
     serializer_class = PrincipleSerializer
 
     def get_queryset(self):
-        assessment_id = self.kwargs['assessment_pk']
-        queryset = Principle.objects.filter(assessment_id=assessment_id)
+        instrument_id = self.kwargs['instrument_pk']
+        queryset = Principle.objects.filter(instrument_id=instrument_id)
         return queryset
 
     def create(self, request, *args, **kwargs):
-        assessment_id = self.kwargs['assessment_pk']
+        instrument_id = self.kwargs['instrument_pk']
         new_principle = Principle.objects.create(principle=request.data['principle'], grade=request.data['grade'],
-                                                 justification=request.data['justification'], assessment_id=assessment_id)
+                                                 instrument_id=instrument_id)
         return Response(self.serializer_class(new_principle).data, status=status.HTTP_200_OK)
 
 
@@ -90,6 +82,27 @@ class EvidenceViewSet(viewsets.ModelViewSet):
     serializer_class = EvidenceSerializer
 
     def get_queryset(self):
-        assessment = self.kwargs['assessment_pk']
-        queryset = Evidence.objects.filter(principle__assessment=assessment)
+        instrument = self.kwargs['instrument_pk']
+        queryset = Evidence.objects.filter(principle__instrument=instrument)
         return queryset
+
+    def create(self, request, *args, **kwargs):
+        if self.request.user.is_anonymous:
+            return Response({'error': 'you are not logged in'}, status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            instrument = Instrument.objects.get(pk=request.data['instrument_id'])
+            principles = request.data['Principios']
+        except KeyError:
+            return Response({'error': 'missing fields'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            for i in principles:
+                principle = i['id']
+                evidences = i['evidencias']
+                level = i['nivel']
+                new_principle = Principle.objects.create(instrument=instrument, grade=level, principle=principle)
+                for j in evidences:
+                    component = Component.objects.get(pk=j)
+                    Evidence.objects.create(principle=new_principle, component=component)
+            return Response({'ok': 'created'}, status=status.HTTP_201_CREATED)
+        except IntegrityError:
+            return Response({'error': 'an instrument with that name already exists'}, status=status.HTTP_409_CONFLICT)
