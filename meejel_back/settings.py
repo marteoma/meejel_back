@@ -83,12 +83,10 @@ WSGI_APPLICATION = 'meejel_back.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        # 'NAME': 'meejel',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        # 'HOST': '127.0.0.1',
+        'NAME': 'meejel',
+        'USER': 'marteoma',
+        'PASSWORD': 'marteoma',
+        'HOST': '127.0.0.1',
         'PORT': '5432'
     }
 }
@@ -180,3 +178,6 @@ LOGGING = {
 # Configure Django App for Heroku.
 import django_heroku
 django_heroku.settings(locals())
+
+import dj_database_url
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
