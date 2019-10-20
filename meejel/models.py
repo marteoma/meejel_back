@@ -5,7 +5,7 @@ from .extras import GRADE_CHOICES, PRINCIPLE_CHOICES, EVIDENCE_CHOICES
 
 class Instrument(models.Model):
     name = models.CharField(null=False, max_length=100, verbose_name='Nombre')
-    owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name='instruments', verbose_name='Dueño')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='instruments', verbose_name='Dueño')
 
     def __str__(self):
         return self.name
@@ -39,7 +39,7 @@ class Principle(models.Model):
     principle = models.CharField(max_length=30, null=False, choices=PRINCIPLE_CHOICES, verbose_name='Principio')
     grade = models.CharField(max_length=30, null=False, choices=GRADE_CHOICES, verbose_name='Nivel')
     justification = models.CharField(max_length=150, null=False, verbose_name='Justificación')
-    assessment = models.ForeignKey(Assessment, on_delete=models.PROTECT, related_name='principles', verbose_name='Evaluación')
+    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE, related_name='principles', verbose_name='Evaluación')
 
     class Meta:
         ordering = ['-id']
@@ -69,8 +69,8 @@ class Evidence(models.Model):
     """
     Represents all the evidence of a principle on an strategy
     """
-    principle = models.ForeignKey(Principle, on_delete=models.PROTECT, related_name='evidences', verbose_name='Principio')
-    component = models.ForeignKey(Component, on_delete=models.PROTECT, verbose_name='Componente')
+    principle = models.ForeignKey(Principle, on_delete=models.CASCADE, related_name='evidences', verbose_name='Principio')
+    component = models.ForeignKey(Component, on_delete=models.CASCADE, verbose_name='Componente')
 
     def __str__(self):
         return '{}: {}'.format(self.principle.principle, self.component.description)
