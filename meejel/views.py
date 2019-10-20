@@ -43,6 +43,7 @@ class InstrumentViewSet(viewsets.ModelViewSet):
             rules = request.data['Reglas']
             roles = request.data['Roles']
             steps = request.data['Pasos']
+            materials = request.data['Materiales']
         except KeyError:
             return Response({'error': 'missing fields'}, status=status.HTTP_400_BAD_REQUEST)
         try:
@@ -55,6 +56,8 @@ class InstrumentViewSet(viewsets.ModelViewSet):
                 Component.objects.create(component_type='Roles', description=i['Roname'], instrument=new_instrument)
             for i in steps:
                 Component.objects.create(component_type='Pasos', description=i['Sname'], instrument=new_instrument)
+            for i in materials:
+                Component.objects.create(component_type='Materiales', description=i['Maname'], instrument=new_instrument)
             return Response({'ok': 'created'}, status=status.HTTP_201_CREATED)
         except IntegrityError:
             return Response({'error': 'an instrument with that name already exists'}, status=status.HTTP_409_CONFLICT)

@@ -36,6 +36,9 @@ class InstrumentSerializer(serializers.ModelSerializer):
         response['Pasos'] = StepSerializer(
             Component.objects.filter(instrument=instance, component_type='Pasos'),
             many=True).data
+        response['Materiales'] = MaterialSerializer(
+            Component.objects.filter(instrument=instance, component_type='Materiales'),
+            many=True).data
         return response
 
 
@@ -99,6 +102,17 @@ class StepSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         response = super().to_representation(instance)
         response['Sname'] = instance.description
+        return response
+
+
+class MaterialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Component
+        fields = ('id', )
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['Maname'] = instance.description
         return response
 
 
