@@ -5,8 +5,8 @@ from .extras import GRADE_CHOICES, PRINCIPLE_CHOICES, EVIDENCE_CHOICES
 
 class Instrument(models.Model):
     name = models.CharField(null=False, max_length=100, verbose_name='Nombre')
-    owner = models.ForeignKey(User, on_delete=models.SET_DEFAULT, related_name='instruments',
-                              verbose_name='Dueño', default='Unknown')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='instruments',
+                              verbose_name='Dueño', null=True)
 
     def __str__(self):
         return self.name
@@ -22,7 +22,7 @@ class Assessment(models.Model):
     """
     An assessment related to an specific user
     """
-    instrument = models.OneToOneField(Instrument, on_delete=models.PROTECT, verbose_name='Instrumento')
+    instrument = models.OneToOneField(Instrument, on_delete=models.CASCADE, verbose_name='Instrumento')
 
     def __str__(self):
         return 'Assessment of: %s - %s' % (self.instrument.name, self.instrument.owner)
