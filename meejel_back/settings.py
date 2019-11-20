@@ -28,6 +28,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_COOKIE_SECURE = True
+
+CSRF_COOKIE_HTTPONLY = True
+
 # Application definition
 
 INSTALLED_APPS = [

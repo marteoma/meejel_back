@@ -4,6 +4,7 @@ import copy
 from django.db.utils import IntegrityError
 from rest_framework import pagination, status
 from rest_framework import viewsets
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import *
 
 from meejel.serializers import *
@@ -27,12 +28,28 @@ class PaginationStandard(pagination.PageNumberPagination):
         })
 
 
+@api_view(['POST'])
+@permission_classes([])
+def sign(request, *args, **kwargs):
+    try:
+        username = request.data['username']
+        password = request.data['password']
+        User.objects.create(username=username, password=password)
+        return Response({"error": "Success"}, status=status.HTTP_200_OK)
+    except KeyError:
+        return Response({"error": "Missing fields"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class InstrumentViewSet(viewsets.ModelViewSet):
     serializer_class = InstrumentSerializer
     # pagination_class = PaginationStandard
 
     def get_queryset(self):
         return self.request.user.instruments.all()
+
+    def destroy(self: Instrument, request, *args, **kwargs):
+        self.principles.all().delete()
+        return Response({'error': 'Principios borrados'}, status=status.HTTP_400_BAD_REQUEST)
 
     def create(self, request, *args, **kwargs):
         if self.request.user.is_anonymous:
