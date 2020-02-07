@@ -13,5 +13,10 @@ pipeline {
                 sh 'python manage.py showmigrations'
             }
         }
+        stage('deploy') {
+            steps {
+                sh 'python manage.py runserver'
+            }
+        }
     }
 }
