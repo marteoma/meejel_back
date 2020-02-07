@@ -6,4 +6,4 @@ RUN pip install -r requirements.txt
 COPY . .
 # RUN python manage.py makemigrations meejel
 # RUN python manage.py migrate
-# CMD ["python", "manage.py", "runserver", "0.0.0.0:9090"]
+CMD ["python", "manage.py", "runserver", "172.18.0.1:9090"]
