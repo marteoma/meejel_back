@@ -8,5 +8,10 @@ pipeline {
                 sh 'python manage.py migrate'
             }
         }
+        stage('test') {
+            steps {
+                sh 'ip a'
+            }
+        }
     }
 }
