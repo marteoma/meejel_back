@@ -11,7 +11,11 @@ pipeline {
         stage('test') {
             steps {
                 sh 'ip a'
-                sh 'curl 0.0.0.0:9090'
+            }
+        }
+        stage('run') {
+            steps {
+                sh 'python manage.py runserver 0.0.0.0:9090'
             }
         }
     }
