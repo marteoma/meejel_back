@@ -1,12 +1,27 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
-from .extras import GRADE_CHOICES, PRINCIPLE_CHOICES, EVIDENCE_CHOICES, GRADE_LEVEL
+from .extras import GRADE_CHOICES, PRINCIPLE_CHOICES, EVIDENCE_CHOICES, GRADE_LEVEL, DIFFICULTY_CHOICES
 
 
 class Instrument(models.Model):
-    name = models.CharField(null=False, max_length=100, verbose_name='Nombre')
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='instruments',
+    name = models.CharField(null=False, blank=False, max_length=100, verbose_name='Nombre')
+    owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name='instruments',
                               verbose_name='Dueño', null=True)
+    description = models.TextField(verbose_name='Descripción', null=True, blank=True)
+    associated_concepts = models.TextField(verbose_name='Conceptos Relacionados', null=True, blank=True)
+    difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES, verbose_name="Dificultad",
+                                  null=True, blank=True)
+    time = models.IntegerField(verbose_name="Tiempo de duración", null=True, blank=True)
+    groups = models.IntegerField(verbose_name="Grupos", null=True, blank=True)
+    winner_selection = models.TextField(verbose_name="Criterio selección ganador", null=True, blank=True)
+    category = models.CharField(max_length=50, verbose_name="Categoría", null=True, blank=True)
+    purpose_teaching = models.BooleanField(verbose_name="Es para enseñar", default=False)
+    purpose_reinforce = models.BooleanField(verbose_name="Es para reforzar", default=False)
+    purpose_check = models.BooleanField(verbose_name="Es para comprobar", default=False)
+    purpose_social = models.BooleanField(verbose_name="Es para socializar", default=False)
+    attachments = models.TextField(null=True, blank=True)
+    creation_date = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
+    update_date = models.DateTimeField(auto_now=True, verbose_name="Fecha de actualización")
 
     def level(self):
         total = 0

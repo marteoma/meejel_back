@@ -19,7 +19,9 @@ class GroupSerializers(serializers.ModelSerializer):
 class InstrumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instrument
-        fields = ('id', 'name', 'level')
+        fields = ('id', 'name', 'level', 'associated_concepts', 'difficulty', 'time', 'winner_selection',
+                  'category', 'purpose_teaching', 'purpose_reinforce', 'purpose_check', 'purpose_social', 'description',
+                  'groups', 'attachments', 'creation_date', 'update_date')
 
     def to_representation(self, instance):
         response = super().to_representation(instance)

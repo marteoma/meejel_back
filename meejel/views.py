@@ -42,6 +42,7 @@ def sign(request, *args, **kwargs):
 
 class InstrumentViewSet(viewsets.ModelViewSet):
     serializer_class = InstrumentSerializer
+
     # pagination_class = PaginationStandard
 
     def get_queryset(self):
@@ -56,15 +57,41 @@ class InstrumentViewSet(viewsets.ModelViewSet):
             return Response({'error': 'you are not logged in'}, status=status.HTTP_401_UNAUTHORIZED)
         try:
             name = request.data['name']
+        except KeyError:
+            return Response({'error': 'missing name'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
             goals = request.data['Objetivos']
+        except KeyError:
+            goals = []
+        try:
             rules = request.data['Reglas']
+        except KeyError:
+            rules = []
+        try:
             roles = request.data['Roles']
+        except KeyError:
+            roles = []
+        try:
             steps = request.data['Pasos']
+        except KeyError:
+            steps = []
+        try:
             materials = request.data['Materiales']
         except KeyError:
-            return Response({'error': 'missing fields'}, status=status.HTTP_400_BAD_REQUEST)
+            materials = []
         try:
-            new_instrument = Instrument.objects.create(name=name, owner=self.request.user)
+            new_instrument = Instrument.objects.create(name=name, owner=request.user,
+                                                       description=request.data['description'],
+                                                       associated_concepts=request.data['associated_concepts'],
+                                                       difficulty=request.data['difficulty'], time=request.data['time'],
+                                                       groups=request.data['groups'],
+                                                       winner_selection=request.data['winner_selection'],
+                                                       category=request.data['category'],
+                                                       purpose_reinforce=request.data['purpose_reinforce'],
+                                                       purpose_check=request.data['purpose_check'],
+                                                       purpose_social=request.data['purpose_social'],
+                                                       purpose_teaching=request.data['purpose_teaching'],
+                                                       attachments=request.data['attachments'])
             for i in goals:
                 Component.objects.create(component_type='Objetivos', description=i['Oname'], instrument=new_instrument)
             for i in rules:
@@ -74,7 +101,8 @@ class InstrumentViewSet(viewsets.ModelViewSet):
             for i in steps:
                 Component.objects.create(component_type='Pasos', description=i['Sname'], instrument=new_instrument)
             for i in materials:
-                Component.objects.create(component_type='Materiales', description=i['Maname'], instrument=new_instrument)
+                Component.objects.create(component_type='Materiales', description=i['Maname'],
+                                         instrument=new_instrument)
             return Response({'ok': 'created'}, status=status.HTTP_201_CREATED)
         except IntegrityError:
             return Response({'error': 'an instrument with that name already exists'}, status=status.HTTP_409_CONFLICT)

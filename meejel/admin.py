@@ -9,8 +9,9 @@ admin.site.site_title = 'Meejel Admin'
 @admin.register(Instrument)
 class InstrumentAdmin(admin.ModelAdmin):
     model = Instrument
-    list_display = ('name', 'owner')
-    list_filter = ('name', 'owner')
+    list_display = ('name', 'owner', 'level', 'associated_concepts', 'difficulty', 'time', 'winner_selection',
+                    'category', 'purpose_teaching', 'purpose_reinforce', 'purpose_check', 'purpose_social',)
+    list_filter = ('name', 'owner', 'category', 'difficulty')
 
 
 @admin.register(Principle)

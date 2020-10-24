@@ -15,6 +15,12 @@ GRADE_CHOICES = (
     ("Muy Alto", "Muy Alto")
 )
 
+DIFFICULTY_CHOICES = (
+    ("Alto", "Alto"),
+    ("Medio", "Medio"),
+    ("Bajo", "Bajo"),
+)
+
 GRADE_LEVEL = {
     "Nulo": 1,
     "Medio": 2,
