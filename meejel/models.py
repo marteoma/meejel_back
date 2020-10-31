@@ -22,6 +22,7 @@ class Instrument(models.Model):
     attachments = models.TextField(null=True, blank=True)
     creation_date = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación")
     update_date = models.DateTimeField(auto_now=True, verbose_name="Fecha de actualización")
+    public = models.BooleanField(default=True, verbose_name="Público")
 
     def level(self):
         total = 0

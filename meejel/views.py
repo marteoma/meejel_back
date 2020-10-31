@@ -91,7 +91,8 @@ class InstrumentViewSet(viewsets.ModelViewSet):
                                                        purpose_check=request.data['purpose_check'],
                                                        purpose_social=request.data['purpose_social'],
                                                        purpose_teaching=request.data['purpose_teaching'],
-                                                       attachments=request.data['attachments'])
+                                                       attachments=request.data['attachments'],
+                                                       public=request.data['public'])
             for i in goals:
                 Component.objects.create(component_type='Objetivos', description=i['Oname'], instrument=new_instrument)
             for i in rules:

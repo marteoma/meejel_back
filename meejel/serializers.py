@@ -21,7 +21,7 @@ class InstrumentSerializer(serializers.ModelSerializer):
         model = Instrument
         fields = ('id', 'name', 'level', 'associated_concepts', 'difficulty', 'time', 'winner_selection',
                   'category', 'purpose_teaching', 'purpose_reinforce', 'purpose_check', 'purpose_social', 'description',
-                  'groups', 'attachments', 'creation_date', 'update_date')
+                  'groups', 'attachments', 'public', 'creation_date', 'update_date')
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
