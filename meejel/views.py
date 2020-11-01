@@ -52,6 +52,41 @@ class InstrumentViewSet(viewsets.ModelViewSet):
         self.principles.all().delete()
         return Response({'error': 'Principios borrados'}, status=status.HTTP_400_BAD_REQUEST)
 
+    def update(self, request, *args, **kwargs):
+        old_instrument = Instrument.objects.get(pk=kwargs.get('pk'))
+        old_instrument.components.all().delete()
+        try:
+            goals = request.data['Objetivos']
+        except KeyError:
+            goals = []
+        try:
+            rules = request.data['Reglas']
+        except KeyError:
+            rules = []
+        try:
+            roles = request.data['Roles']
+        except KeyError:
+            roles = []
+        try:
+            steps = request.data['Pasos']
+        except KeyError:
+            steps = []
+        try:
+            materials = request.data['Materiales']
+        except KeyError:
+            materials = []
+        for i in goals:
+            Component.objects.create(component_type='Objetivos', description=i['Oname'], instrument=old_instrument)
+        for i in rules:
+            Component.objects.create(component_type='Reglas', description=i['Rname'], instrument=old_instrument)
+        for i in roles:
+            Component.objects.create(component_type='Roles', description=i['Roname'], instrument=old_instrument)
+        for i in steps:
+            Component.objects.create(component_type='Pasos', description=i['Sname'], instrument=old_instrument)
+        for i in materials:
+            Component.objects.create(component_type='Materiales', description=i['Maname'], instrument=old_instrument)
+        return super(InstrumentViewSet, self).update(request, args, kwargs)
+
     def create(self, request, *args, **kwargs):
         if self.request.user.is_anonymous:
             return Response({'error': 'you are not logged in'}, status=status.HTTP_401_UNAUTHORIZED)
