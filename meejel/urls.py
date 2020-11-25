@@ -12,6 +12,7 @@ instrument_router = routers.NestedSimpleRouter(router, 'instrument', lookup='ins
 instrument_router.register('principle', PrincipleViewSet, base_name='principles')
 instrument_router.register('evidence', EvidenceViewSet, base_name='evidences')
 
+router.register('category', CategoryViewSet, basename='category')
 
 urlpatterns = [
     path('', include(router.urls)),

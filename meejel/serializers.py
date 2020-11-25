@@ -16,6 +16,12 @@ class GroupSerializers(serializers.ModelSerializer):
         fields = ('name',)
 
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('name',)
+
+
 class InstrumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instrument
@@ -26,6 +32,7 @@ class InstrumentSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         response = super().to_representation(instance)
         response['owner'] = instance.owner.get_full_name()
+        response['category'] = Category.objects.get(pk=response['category']).name
         response['Objetivos'] = GoalSerializer(
             Component.objects.filter(instrument=instance, component_type='Objetivos'),
             many=True).data

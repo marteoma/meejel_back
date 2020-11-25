@@ -1,5 +1,4 @@
 import logging
-import copy
 
 from django.db.utils import IntegrityError
 from rest_framework import pagination, status
@@ -121,7 +120,7 @@ class InstrumentViewSet(viewsets.ModelViewSet):
                                                        difficulty=request.data['difficulty'], time=request.data['time'],
                                                        groups=request.data['groups'],
                                                        winner_selection=request.data['winner_selection'],
-                                                       category=request.data['category'],
+                                                       category=Category.objects.get(name=request.data['category']),
                                                        purpose_reinforce=request.data['purpose_reinforce'],
                                                        purpose_check=request.data['purpose_check'],
                                                        purpose_social=request.data['purpose_social'],
@@ -157,6 +156,11 @@ class PrincipleViewSet(viewsets.ModelViewSet):
         new_principle = Principle.objects.create(principle=request.data['principle'], grade=request.data['grade'],
                                                  instrument_id=instrument_id)
         return Response(self.serializer_class(new_principle).data, status=status.HTTP_200_OK)
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
 
 
 class EvidenceViewSet(viewsets.ModelViewSet):

@@ -6,6 +6,13 @@ admin.site.index_title = 'MEEJEL'
 admin.site.site_title = 'Meejel Admin'
 
 
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    model = Category
+    list_display = ('id', 'name')
+    list_filter = ('name', )
+
+
 @admin.register(Instrument)
 class InstrumentAdmin(admin.ModelAdmin):
     model = Instrument
