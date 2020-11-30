@@ -53,6 +53,7 @@ class InstrumentViewSet(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         old_instrument = Instrument.objects.get(pk=kwargs.get('pk'))
+        request.data['category'] = Category.objects.get(name=request.data['category']).pk
         old_instrument.components.all().delete()
         try:
             goals = request.data['Objetivos']
