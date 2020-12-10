@@ -63,15 +63,15 @@ class Principle(models.Model):
 
     @property
     def weight(self):
-        x = self.evidences.filter(component__instrument=self.instrument, component__component_type='Objetivos').count()
-        n = self.evidences.filter(principle=self, component__component_type='Objetivos').count()
+        x = self.evidences.filter(component__component_type='Objetivos').count()
+        n = self.evidences.filter(component__component_type='Objetivos').count()
         tlg = (40 * x) / n if n > 0 else 0
-        y = self.evidences.filter(component__instrument=self.instrument, component__component_type='Reglas').count()
-        m = self.evidences.filter(principle=self, component__component_type='Reglas').count()
+        y = self.evidences.filter(component__component_type='Reglas').count()
+        m = self.evidences.filter(component__component_type='Reglas').count()
         tru = (30 * y) / m if m > 0 else 0
-        tro = self.evidences.filter(principle=self, component__component_type='Roles').count()
-        tma = self.evidences.filter(principle=self, component__component_type='Materiales').count()
-        tst = self.evidences.filter(principle=self, component__component_type='Pasos').count()
+        tro = self.evidences.filter(component__component_type='Roles').count()
+        tma = self.evidences.filter(component__component_type='Materiales').count()
+        tst = self.evidences.filter(component__component_type='Pasos').count()
         r = 10 if tro > 0 else 0
         s = 5 if tst > 0 else 0
         m = 5 if tma > 0 else 0
