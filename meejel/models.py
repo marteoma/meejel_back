@@ -68,7 +68,7 @@ class Principle(models.Model):
         tlg = (40 / n) * x if n > 0 else 0
         m = Component.objects.filter(component_type='Reglas', instrument=self.instrument).count()
         y = Evidence.objects.filter(principle=self, component__component_type='Reglas').count()
-        tru = (30 / m) * y if m > 0 else 0
+        tru = (30 / m) * y if m > 0 else 0 # 3.75
         tro = Evidence.objects.filter(principle=self, component__component_type='Roles').count()
         tma = Evidence.objects.filter(principle=self, component__component_type='Materiales').count()
         tst = Evidence.objects.filter(principle=self, component__component_type='Pasos').count()
