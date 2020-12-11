@@ -63,10 +63,10 @@ class Principle(models.Model):
 
     @property
     def weight(self):
-        x = Evidence.objects.filter(component__instrument=self.instrument, component__component_type='Objetivos').count()
+        x = Component.objects.filter(component_type='Objetivos', instrument=self.instrument).count()
         n = Evidence.objects.filter(principle=self, component__component_type='Objetivos').count()
         tlg = (40 * n) / x if n > 0 else 0
-        y = Evidence.objects.filter(component__instrument=self.instrument, component__component_type='Reglas').count()
+        y = Component.objects.filter(component_type='Reglas', instrument=self.instrument).count()
         m = Evidence.objects.filter(principle=self, component__component_type='Reglas').count()
         tru = (30 * m) / y if m > 0 else 0
         tro = Evidence.objects.filter(principle=self, component__component_type='Roles').count()
