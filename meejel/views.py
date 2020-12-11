@@ -181,6 +181,7 @@ class EvidenceViewSet(viewsets.ModelViewSet):
         except KeyError:
             return Response({'error': 'missing fields'}, status=status.HTTP_400_BAD_REQUEST)
         try:
+            instrument.principles.all().delete()
             for i in principles:
                 principle = i['id']
                 evidences = i['evidencias']
@@ -191,4 +192,4 @@ class EvidenceViewSet(viewsets.ModelViewSet):
                     Evidence.objects.create(principle=new_principle, component=component)
             return Response({'ok': 'created'}, status=status.HTTP_201_CREATED)
         except IntegrityError:
-            return Response({'error': 'an instrument with that name already exists'}, status=status.HTTP_409_CONFLICT)
+            return Response({'error': 'algo falló, contacte al administrador'}, status=status.HTTP_409_CONFLICT)
